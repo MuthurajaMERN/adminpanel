@@ -1,7 +1,8 @@
 // components/CountryList.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCountries, deleteCountry } from '../redux/countrySlice';
+import { createCountry, deleteCountry, fetchCountries, updateCountry } from '../../slices/countrySlice';
+
 
 const CountryList = () => {
   const dispatch = useDispatch();

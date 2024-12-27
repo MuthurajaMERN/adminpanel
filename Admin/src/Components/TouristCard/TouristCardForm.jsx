@@ -9,7 +9,7 @@ import {
 
 const AdminPanel = () => {
   const dispatch = useDispatch();
-  const { cards, isLoading, error } = useSelector((state) => state.touristCard);
+  const { cards, isLoading, error } = useSelector((state) => state.touristCard.addCardToServer);
 
   const [form, setForm] = useState({
     image: "",

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useSelector,useDispatch } from 'react-redux';
-import { deleteCardFromServer } from '../../slices/countrySlice';
+import {
+  deleteCardFromServer,
+} from "../../slices/touristCardSlice";
 
 const TouristCardList = ({ setCurrentCard }) => {
-  const cards = useSelector((state) => state.touristCard.cards);
+  const cards = useSelector((state) => state.touristCard.fetchCards);
   const dispatch = useDispatch();
 
   

@@ -17,6 +17,8 @@ import TouristCardList from './Components/TouristCard/TouristCardList';
 import CountryForm from './Components/Country/countryForm';
 import CountryList from './Components/Country/countryList';
 
+import AvailablePackages from'./Components/AvaliblePackage/AvaliblePackage';
+
 function App() {
   const [currentCard, setCurrentCard] = useState(null);
 
@@ -32,11 +34,14 @@ function App() {
           <Route path="listproduct" element={<ListProduct />} />
           <Route path="testimonials" element={<Testimonials />} />
           <Route path="listtestimonials" element={<ListTestimonials />} />
+          <Route path="avalibalePackage" element={<AvailablePackages/>} />
+          
           <Route path="edit/:id" element={<Edit />} />
           <Route path="countryfrom" element={<CountryForm/>}/>
           <Route path="countrylist" element={<CountryList/>}/>
 
         </Route>
+       
         {/* Adding routes for Tourist Cards */}
         <Route path="/touristcards" element={
           <>
@@ -49,7 +54,9 @@ function App() {
           </div>
           </>
         } />
+         
       </Routes>
+     
     </Provider>
   );
 }

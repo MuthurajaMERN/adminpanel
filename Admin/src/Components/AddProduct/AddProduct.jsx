@@ -1,24 +1,32 @@
 import React, { useState } from "react";
-import "./AddProduct.css";
 import upload_area from "../Assets/upload_area.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { addProduct } from "../../slices/productSlice";
 
-const AddProduct = () => {
+const AddTouristPackage = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.product.addProduct);
 
   const [image, setImage] = useState(null);
-  const [productDetails, setProductDetails] = useState({
+  const [packageDetails, setPackageDetails] = useState({
     title: "",
     description: "",
     category: "",
     subCategory: "",
   });
   const [details, setDetails] = useState([{ name: "", value: "" }]);
+
+  const categories = {
+    "Adventure Tours": ["Hiking", "Rafting", "Skydiving", "Skiing"],
+    "Cultural Tours": ["City Walks", "Heritage Sites", "Museums"],
+    "Luxury Tours": ["Cruises", "5-Star Hotels", "Private Jets"],
+    "Wildlife Tours": ["Safari", "Bird Watching", "Jungle Camping"],
+    "Beach Tours": ["Island Hopping", "Resorts", "Snorkeling"],
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProductDetails((prevDetails) => ({
+    setPackageDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
@@ -36,9 +44,7 @@ const AddProduct = () => {
     }
   };
 
-  const handleAddDetail = () => {
-    setDetails([...details, { name: "", value: "" }]);
-  };
+  const handleAddDetail = () => setDetails([...details, { name: "", value: "" }]);
 
   const handleDetailChange = (index, event) => {
     const values = [...details];
@@ -51,198 +57,171 @@ const AddProduct = () => {
     values.splice(index, 1);
     setDetails(values);
   };
-  const handleSubmit = () => {
-    dispatch(addProduct({ productDetails, image, details }));
-  };
-  
 
-  const categories = {
-    "Interactive Panels": [
-      "65’ interactive Panel android",
-      "65’ interactive panel android with Window",
-      "75’ interactive Panel android",
-      "75’ interactive panel android with Window",
-      "86’ interactive Panel android",
-      "86’ interactive panel android with Window",
-      "98’ interactive Panel android",
-      "98’ interactive panel android with Window",
-    ],
-    "Smart Class Setups": [
-      "82 Interactive Board",
-      "92 Interactive Board",
-      "102 Interactive Board",
-      "Smart class Speaker",
-    ],
-    "Writing Boards": [
-  
-      "Ceramic Green Board (Customized size)",
-      "Magnetic Green Board (Customized size)",
-      "Non Magnetic Green Board (Customized size)",
-      "Ceramic White Board (Customized size)",
-      "Magnetic White Board (Customized size)",
-      "Non Magnetic White Board (Customized size)",
-      "Green Board & White Board (Customized size)",
-      "Green Board & Notice Board (Customized size)",
-      "White Board & Notice Board (Customized size)",
-      "Monthly & Weekly Planner Board (Customized size)",
-      "Time Table & Data Entry Board (Customized size)",
-    ],
-    "Display Boards": [
-      "Preshograph Board",
-      "Grooved Board",
-      "Lobby Information Board",
-      "Exhibition Display Board",
-      "Three Leg Stand",
-      "Four Leg Stand",
-      "Movable Stand",
-      "Revolving Stand",
-    ],
-    "Classroom Furniture": [
-      "SS Desk and Bench",
-      "MS with Powder Coated Desk And Bench",
-      "Wooden Top with MS Leg Desk And Bench",
-    ],
-    "Kindergarten Items": [],
-    "Playground Items": [
-      "Indoor",
-      "Outdoor",
-    ],
-    "Laboratory Furniture": [],
-    "Podiums": [
-      "Digital Podium",
-      "Wooden Podium",
-    ],
-    "Other Items": [],
+  const handleSubmit = () => {
+    dispatch(addProduct({ packageDetails, image, details }));
   };
-  
 
   return (
-    <div className="addproduct">
-      <h1>Add Product</h1>
-
-      <div className="addproduct-itemfield">
-        <label htmlFor="title">Product Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={productDetails.title}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className="addproduct-itemfield">
-        <label htmlFor="description">Product Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={productDetails.description}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className="addproduct-itemfield">
-        <label htmlFor="category">Product Category</label>
-        <select
-          id="category"
-          name="category"
-          value={productDetails.category}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Category</option>
-          {Object.keys(categories).map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="addproduct-itemfield">
-        <label htmlFor="subCategory">Sub Category</label>
-        <select
-          id="subCategory"
-          name="subCategory"
-          value={productDetails.subCategory}
-          onChange={handleInputChange}
-          disabled={!productDetails.category}
-        >
-          <option value="">Select SubCategory</option>
-          {categories[productDetails.category]?.map((subcat) => (
-            <option key={subcat} value={subcat}>
-              {subcat}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Product Details Section */}
-      <div className="addproduct-itemfield">
-        <label>Product Details</label>
-        
-        {details.map((detail, index) => (
-          <div key={index} className="d-flex mb-2">
-            <div className="flex-1">{index + 1}</div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="flex-1 border border-gray-300 rounded p-2"
-              value={detail.name}
-              onChange={(e) => handleDetailChange(index, e)}
-            />
-            <input
-              type="text"
-              name="value"
-              placeholder="Value"
-              className="flex-1 border border-gray-300 rounded p-2"
-              value={detail.value}
-              onChange={(e) => handleDetailChange(index, e)}
-            />
-            <button
-              type="button"
-              onClick={handleAddDetail}
-              className="text-red-500 font-bold"
-            >
-              +
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDeleteDetail(index)}
-              className="text-red-500" // Style for delete button
-            >
-              -
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Image Upload Section */}
-      <div className="addproduct-itemfield">
-        <label htmlFor="file-input">Upload Image</label>
-        <label htmlFor="file-input" className="cursor-pointer">
-          <img
-            className="addproduct-thumbnail-img"
-            src={!image ? upload_area : URL.createObjectURL(image)}
-            alt="Upload area"
-          />
-        </label>
-        <input id="file-input" type="file" onChange={handleFileChange} hidden />
-        {image && <p>{image.name}</p>}
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        className="addproduct-btn"
-        disabled={isLoading}
+    <div className="flex flex-col gap-6 max-w-screen-lg mx-auto px-6 py-8">
+      {/* Form Section */}
+      <form
+        className="bg-white p-6 rounded-lg shadow-lg grid grid-cols-1 lg:grid-cols-2 gap-6"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
       >
-        {isLoading ? "Adding..." : "Add Product"}
-      </button>
+        <h1 className="col-span-2 text-2xl font-semibold text-gray-800">Add Tourist Package</h1>
+
+        {/* Package Title */}
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            Package Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={packageDetails.title}
+            onChange={handleInputChange}
+            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter package title"
+          />
+        </div>
+
+        {/* Package Description */}
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            Package Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={packageDetails.description}
+            onChange={handleInputChange}
+            className="w-full border border-gray-300 rounded-md p-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter package description"
+          />
+        </div>
+
+        {/* Package Category */}
+        <div>
+          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+            Package Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={packageDetails.category}
+            onChange={handleInputChange}
+            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Category</option>
+            {Object.keys(categories).map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Package Subcategory */}
+        <div>
+          <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700 mb-2">
+            Sub Category
+          </label>
+          <select
+            id="subCategory"
+            name="subCategory"
+            value={packageDetails.subCategory}
+            onChange={handleInputChange}
+            disabled={!packageDetails.category}
+            className="w-full border border-gray-300 rounded-md p-2 disabled:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select SubCategory</option>
+            {categories[packageDetails.category]?.map((subcat) => (
+              <option key={subcat} value={subcat}>
+                {subcat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Package Details */}
+        <div className="col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Package Details</label>
+          {details.map((detail, index) => (
+            <div key={index} className="flex items-center gap-4 mb-2">
+              <input
+                type="text"
+                name="name"
+                placeholder="Detail Name"
+                value={detail.name}
+                onChange={(e) => handleDetailChange(index, e)}
+                className="flex-1 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="text"
+                name="value"
+                placeholder="Detail Value"
+                value={detail.value}
+                onChange={(e) => handleDetailChange(index, e)}
+                className="flex-1 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={handleAddDetail}
+                className="text-green-500 font-bold"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteDetail(index)}
+                className="text-red-500 font-bold"
+              >
+                -
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Image Upload */}
+        <div className="col-span-2">
+          <label htmlFor="file-input" className="block text-sm font-medium text-gray-700 mb-2">
+            Upload Image
+          </label>
+          <label
+            htmlFor="file-input"
+            className="block w-32 h-32 border rounded-lg cursor-pointer overflow-hidden"
+          >
+            <img
+              src={!image ? upload_area : URL.createObjectURL(image)}
+              alt="Upload Preview"
+              className="w-full h-full object-cover"
+            />
+          </label>
+          <input
+            id="file-input"
+            type="file"
+            onChange={handleFileChange}
+            hidden
+          />
+          {image && <p className="mt-2 text-sm text-gray-500">{image.name}</p>}
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="col-span-2 w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition"
+          disabled={isLoading}
+        >
+          {isLoading ? "Adding..." : "Add Package"}
+        </button>
+      </form>
     </div>
-
-
-
   );
 };
 
-export default AddProduct;
+export default AddTouristPackage;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { addTestimonial } from '../../slices/testimonialSlice';
 import { useSelector, useDispatch } from "react-redux";
+import ListTestimonials from './ListTestimonials';
 
 const AdminAddTestimonial = () => {
   const [name, setName] = useState('');
@@ -20,6 +21,7 @@ const { loading, error,data } = useSelector((state) => state.testimonial.addTest
   };
 console.log(error,data)
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
       <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
@@ -32,7 +34,14 @@ console.log(error,data)
         ))}
       </div>
       <button type="submit">Add Testimonial</button>
+
     </form>
+
+<div>
+<h1>List Testimonal</h1>
+<ListTestimonials/>
+</div>
+</>
   );
 };
 
