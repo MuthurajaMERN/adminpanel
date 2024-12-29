@@ -1,88 +1,94 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../constant";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const fetchCards = createAsyncThunk(
-  "touristCard/fetchCards",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/tourist_card/get_all`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+const API_BASE_URL = 'http://localhost:8000'; // Replace with your backend URL
 
-export const addCardToServer = createAsyncThunk(
-  "touristCard/addCardToServer",
-  async (cardDetails, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/tourist_card/add`, cardDetails);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+// Async Thunks
+export const fetchTouristCards = createAsyncThunk('touristCard/fetchAll', async () => {
+  const response = await axios.get(`${API_BASE_URL}/get-cards`);
 
-export const updateCardOnServer = createAsyncThunk(
-  "touristCard/updateCardOnServer",
-  async ({ id, updatedCard }, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${BASE_URL}/tourist_card/update/${id}`, updatedCard);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+  console.log("fetchTouristCards")
+  return response.data;
+});
 
-export const deleteCardFromServer = createAsyncThunk(
-  "touristCard/deleteCardFromServer",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}/tourist_card/delete/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+export const fetchTouristCardById = createAsyncThunk('touristCard/fetchById', async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/get-cards/${id}`);
 
+  console.log("fetchTouristCardsById")
+
+  return response.data;
+});
+
+export const createTouristCard = createAsyncThunk('touristCard/create', async (card) => {
+  const response = await axios.post(`${API_BASE_URL}/add-card`, card);
+
+  console.log("craeteTouristCards")
+
+  return response.data;
+});
+
+export const updateTouristCard = createAsyncThunk('touristCard/update', async ({ id, updatedData }) => {
+  const response = await axios.put(`${API_BASE_URL}/put-cards/${id}`, updatedData);
+  console.log("updateTouristCards")
+
+  return response.data;
+});
+
+export const deleteTouristCard = createAsyncThunk('touristCard/delete', async (id) => {
+  await axios.delete(`${API_BASE_URL}/delete-cards/${id}`);
+  return id; // Return the deleted ID to update the state
+});
+
+// Slice
 const touristCardSlice = createSlice({
-  name: "touristCard",
+  name: 'touristCard',
   initialState: {
     cards: [],
-    isLoading: false,
+    card: null,
+    loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {}, // No additional reducers needed
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCards.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      // Fetch All
+      .addCase(fetchTouristCards.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(fetchCards.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.cards = action.payload.data;
+      .addCase(fetchTouristCards.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cards = action.payload;
       })
-      .addCase(fetchCards.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
+      .addCase(fetchTouristCards.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       })
-      .addCase(addCardToServer.fulfilled, (state, action) => {
-        state.cards.push(action.payload.data);
+      // Fetch By ID
+      .addCase(fetchTouristCardById.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(updateCardOnServer.fulfilled, (state, action) => {
-        const index = state.cards.findIndex((card) => card._id === action.payload.data._id);
+      .addCase(fetchTouristCardById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.card = action.payload;
+      })
+      .addCase(fetchTouristCardById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Create
+      .addCase(createTouristCard.fulfilled, (state, action) => {
+        state.cards.push(action.payload);
+      })
+      // Update
+      .addCase(updateTouristCard.fulfilled, (state, action) => {
+        const index = state.cards.findIndex((card) => card.id === action.payload.id);
         if (index !== -1) {
-          state.cards[index] = action.payload.data;
+          state.cards[index] = action.payload;
         }
       })
-      .addCase(deleteCardFromServer.fulfilled, (state, action) => {
-        state.cards = state.cards.filter((card) => card._id !== action.payload.data._id);
+      // Delete
+      .addCase(deleteTouristCard.fulfilled, (state, action) => {
+        state.cards = state.cards.filter((card) => card.id !== action.payload);
       });
   },
 });

@@ -28,7 +28,7 @@ app.use('/auth',userRoute)
 app.use('/product',productRoute)
 app.use('/testimonials', testimonialsRouter);
 
-app.use('/api/touristcards', touristCardsRoute);
+app.use('/touristcard', touristCardsRoute);
 app.use('/api/countries', countryRoutes);
 
 

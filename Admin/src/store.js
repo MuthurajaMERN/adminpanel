@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import adminSlice from './slices/adminSlice'
 import productSlice from './slices/productSlice'
 import testimonialReducer from './slices/testimonialSlice';
-import touristCardSlice from './slices/touristCardSlice';
+import touristCardReducer from './slices/touristCardSlice';
 
 import countryReducer from './slices/countrySlice';
 export const store = configureStore({
@@ -10,9 +10,10 @@ export const store = configureStore({
     admin:adminSlice,
     product: productSlice,
     testimonial: testimonialReducer,
-    cards: touristCardSlice,
+    cards: touristCardReducer,
     countries:countryReducer,
-
+    touristCard: touristCardReducer,
+    
     
   },
 })

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { environment } from "../constant";
+import { BASE_URL} from "../constant";
 import Swal from "sweetalert2";
 
 
@@ -8,7 +8,7 @@ export const getAllProduct = createAsyncThunk(
   "product/getAllProduct",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${environment.BASE_URL}/product/get_all_product`);
+      const response = await axios.get(`${BASE_URL}/product/get_all_product`);
       return response.data;
     } catch (error) {
       Swal.fire({

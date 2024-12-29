@@ -1,52 +1,67 @@
-const TouristCard = require("../models/TouristCardModel");
+const TouristCard = require('../models/touristCardModel');
 
-// Add a new tourist card
-exports.addCard = async (req, res) => {
+// Create a new TouristCard
+exports.createTouristCard = async (req, res) => {
   try {
-    const card = new TouristCard(req.body);
-    await card.save();
-    res.status(201).json({ success: true, data: card });
+    const touristCard = new TouristCard(req.body);
+    await touristCard.save();
+    res.status(201).json({ success: true, data: touristCard });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({ success: false, error: error.message });
   }
 };
 
-// Get all tourist cards
-exports.getAllCards = async (req, res) => {
+// Get all TouristCards
+exports.getAllTouristCards = async (req, res) => {
   try {
-    const cards = await TouristCard.find();
-    res.status(200).json({ success: true, data: cards });
+    const touristCards = await TouristCard.find();
+    res.status(200).json({ success: true, data: touristCards });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
-// Update a tourist card
-exports.updateCard = async (req, res) => {
+// Get a single TouristCard by ID
+exports.getTouristCardById = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedCard = await TouristCard.findByIdAndUpdate(id, req.body, {
+    const touristCard = await TouristCard.findById(id);
+    if (!touristCard) {
+      return res.status(404).json({ success: false, message: "TouristCard not found" });
+    }
+    res.status(200).json({ success: true, data: touristCard });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Update a TouristCard by ID
+exports.updateTouristCard = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const touristCard = await TouristCard.findByIdAndUpdate(id, req.body, {
       new: true,
+      runValidators: true,
     });
-    if (!updatedCard) {
-      return res.status(404).json({ success: false, message: "Card not found" });
+    if (!touristCard) {
+      return res.status(404).json({ success: false, message: "TouristCard not found" });
     }
-    res.status(200).json({ success: true, data: updatedCard });
+    res.status(200).json({ success: true, data: touristCard });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({ success: false, error: error.message });
   }
 };
 
-// Delete a tourist card
-exports.deleteCard = async (req, res) => {
+// Delete a TouristCard by ID
+exports.deleteTouristCard = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedCard = await TouristCard.findByIdAndDelete(id);
-    if (!deletedCard) {
-      return res.status(404).json({ success: false, message: "Card not found" });
+    const touristCard = await TouristCard.findByIdAndDelete(id);
+    if (!touristCard) {
+      return res.status(404).json({ success: false, message: "TouristCard not found" });
     }
-    res.status(200).json({ success: true, data: deletedCard });
+    res.status(200).json({ success: true, message: "TouristCard deleted successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 };

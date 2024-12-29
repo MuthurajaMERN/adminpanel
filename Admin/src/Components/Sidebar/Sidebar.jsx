@@ -22,30 +22,19 @@ const Sidebar = () => {
           <p>Category List</p>
         </div>
       </Link>
-      <Link to='/touristcards' style={{ textDecoration: 'none' }}>
+      <Link to='/CardApp' style={{ textDecoration: 'none' }}>
         <div className="sidebar-item">
           <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
           <p>TouristCardForm</p>
         </div>
       </Link>
-      <Link to='/touristcards' style={{ textDecoration: 'none' }}>
+      <Link to='/touristCardList' style={{ textDecoration: 'none' }}>
         <div className="sidebar-item">
           <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
           <p>TouristCardList</p>
         </div>
       </Link> 
-      <Link to='/countryfrom' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
-          <p>CountryFrom</p>
-        </div>
-      </Link>
-      <Link to='/countrylist' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
-          <p>CountryList</p>
-        </div>
-      </Link>
+    
 
       <Link to='/home/Testimonials' style={{ textDecoration: 'none' }}>
         <div className="sidebar-item">

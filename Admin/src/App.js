@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { Route, Routes } from "react-router-dom";
@@ -12,15 +12,14 @@ import ListProduct from "./Components/ListProduct/ListProduct";
 import Edit from "./Components/editProduct/Edit";
 import Testimonials from "./Components/Testimonials/Testimonials";
 import ListTestimonials from "./Components/Testimonials/ListTestimonials";
-import TouristCardForm from './Components/TouristCard/TouristCardForm';
-import TouristCardList from './Components/TouristCard/TouristCardList';
-import CountryForm from './Components/Country/countryForm';
-import CountryList from './Components/Country/countryList';
 
 import AvailablePackages from'./Components/AvaliblePackage/AvaliblePackage';
+import CardApp from './Components/TouristCard/CardApp';
+
+
 
 function App() {
-  const [currentCard, setCurrentCard] = useState(null);
+  
 
   return (
     <Provider store={store}>
@@ -37,23 +36,23 @@ function App() {
           <Route path="avalibalePackage" element={<AvailablePackages/>} />
           
           <Route path="edit/:id" element={<Edit />} />
-          <Route path="countryfrom" element={<CountryForm/>}/>
-          <Route path="countrylist" element={<CountryList/>}/>
 
+          <Route path="card" element={<CardApp/>} />
         </Route>
        
         {/* Adding routes for Tourist Cards */}
-        <Route path="/touristcards" element={
+        {/* <Route path="/CardApp" element={
           <>
           <div>
             <h1>Tourist Cards</h1>
             <TouristCardForm currentCard={currentCard} setCurrentCard={setCurrentCard} />
           </div>
           <div>
-            <TouristCardList currentCard={currentCard} setCurrentCard={setCurrentCard} />
+            <TouristCardTable currentCard={currentCard} setCurrentCard={setCurrentCard} />
           </div>
+          
           </>
-        } />
+        } /> */}
          
       </Routes>
      

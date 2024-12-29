@@ -1,15 +1,18 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 const {
-  addCard,
-  getAllCards,
-  updateCard,
-  deleteCard,
-} = require("../controller/TouriestCardContoller");
+  createTouristCard,
+  getAllTouristCards,
+  getTouristCardById,
+  updateTouristCard,
+  deleteTouristCard,
+} = require('../controller/TouriestCardContoller');
 
-router.post("/add", addCard);
-router.get("/get_all", getAllCards);
-router.put("/update/:id", updateCard);
-router.delete("/delete/:id", deleteCard);
+// CRUD Routes
+router.post('/add-card', createTouristCard);
+router.get('/get-cards', getAllTouristCards);
+router.get('/get-cards/:id', getTouristCardById);
+router.put('/put-cards/:id', updateTouristCard);
+router.delete('/delete-cards/:id', deleteTouristCard);
 
 module.exports = router;
