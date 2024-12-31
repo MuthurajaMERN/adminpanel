@@ -1,62 +1,49 @@
-import React from 'react';
-import './Sidebar.css';
-import add_product_icon from '../Assets/Product_Cart.png';
-import list_product_icon from '../Assets/Product_list_icon.svg';
-import { Link } from 'react-router-dom';
-// import sideimage from "../../Components/Assets/swiper8.png";
-import star from "../../Components/Assets/star.png";
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  MdDashboard,
+  MdAddShoppingCart,
+  MdViewList,
+  MdFeedback,
+  MdEventAvailable,
+  MdLogout,
+} from "react-icons/md";
 
 const Sidebar = () => {
-  return (
-    <div className='sidebar'>
-      <Link to='/home' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={add_product_icon} alt="Add Product" style={{ width: '50px', height: '50px' }} />
-          <p>Add Category</p>
-        </div>
-      </Link>
-      <Link to='/home/listproduct' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={list_product_icon} alt="Product List" style={{ width: '50px', height: '50px' }} />
-          <p>Category List</p>
-        </div>
-      </Link>
-      <Link to='/CardApp' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
-          <p>TouristCardForm</p>
-        </div>
-      </Link>
-      <Link to='/touristCardList' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Tourist" style={{ width: '50px', height: '50px' }} />
-          <p>TouristCardList</p>
-        </div>
-      </Link> 
-    
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-      <Link to='/home/Testimonials' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Our Testimonials" style={{ width: '50px', height: '50px' }} />
-          <p>Our Testimonials</p>
-        </div>
-      </Link>
-      <Link to='/home/ListTestimonials' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Our Testimonials" style={{ width: '50px', height: '50px' }} />
-          <p>List Testimonials</p>
-        </div>
-      </Link>
-      <Link to='/home/avalibalePackage' style={{ textDecoration: 'none' }}>
-        <div className="sidebar-item">
-          <img src={star} alt="Our Testimonials" style={{ width: '50px', height: '50px' }} />
-          <p>AvaliablePackages</p>
-        </div>
-      </Link>
-      {/* <img className='sidebar-background' src={sideimage} alt="Sidebar Background Image" /> */}
-    </div>
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  return (
+    <aside
+      className={`fixed lg:static w-[240px] bg-indigo-50 h-[calc(100vh-4rem)] lg:h-auto transform ${
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } transition-transform duration-300 z-40 p-4`}
+    >
+      <button className="lg:hidden p-2" onClick={toggleMenu}>
+        <MdDashboard size={24} />
+      </button>
+      <div className="bg-white rounded-xl shadow-lg p-4 space-y-4">
+        <SidebarItem icon={MdDashboard} label="Dashboard" to="/home" />
+        <SidebarItem icon={MdAddShoppingCart} label="Add Product" to="/home" />
+        <SidebarItem icon={MdViewList} label="List Product" to="/home/listproduct" />
+        <SidebarItem icon={MdFeedback} label="Testimonials" to="/home/testimonials" />
+        <SidebarItem icon={MdFeedback} label="List Testimonials" to="/home/listtestimonials" />
+        <SidebarItem icon={MdEventAvailable} label="Available Packages" to="/home/avalibalePackage" />
+        <SidebarItem icon={MdLogout} label="Log Out" to="/logout" />
+      </div>
+    </aside>
   );
-}
+};
+
+const SidebarItem = ({ icon: Icon, label, to }) => (
+  <Link
+    to={to}
+    className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1"
+  >
+    <Icon className="mr-2" size={24} />
+    {label}
+  </Link>
+);
 
 export default Sidebar;
