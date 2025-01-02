@@ -22,7 +22,7 @@ app.use(express.json())
 
 // Middleware
 app.use(bodyParser.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
 
 app.use('/auth',userRoute)
 app.use('/product',productRoute)

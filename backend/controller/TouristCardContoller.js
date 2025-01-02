@@ -1,4 +1,4 @@
-const TouristCard = require('../models/touristCard');
+const TouristCard = require('../models/TouristCardModel');
 
 // Create a new tourist card
 exports.createTouristCard = async (req, res) => {
