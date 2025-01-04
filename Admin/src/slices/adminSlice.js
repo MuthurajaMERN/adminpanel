@@ -27,6 +27,7 @@ export const login = createAsyncThunk(
         password,
       });
       localStorage.setItem("token", response.data.data);
+      console.log("token localstorage:",response.data.data)
       return response;
     } catch (error) {
       return rejectWithValue(error.response.data);

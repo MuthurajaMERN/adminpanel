@@ -1,42 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { BASE_URL } from "../constant"; // Ensure this points to your environment configuration file
 
-// Async Thunks
-export const fetchCountries = createAsyncThunk('countries/fetchAll', async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/countries`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
+// Base URL for API
+const BASE_URL = 'http://localhost:8000'; // Adjust according to your server setup
+
+// Thunks for asynchronous API calls
+export const fetchAllCountries = createAsyncThunk('countries/fetchAll', async () => {
+  const response = await axios.get(`${BASE_URL}/countries`);
+  return response.data;
 });
 
-export const createCountry = createAsyncThunk('countries/create', async (countryData, { rejectWithValue }) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/api/countries`, countryData);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
+export const fetchCountryById = createAsyncThunk('countries/fetchById', async (id) => {
+  const response = await axios.get(`${BASE_URL}/countries/${id}`);
+  return response.data;
 });
 
-export const updateCountry = createAsyncThunk('countries/update', async ({ id, countryData }, { rejectWithValue }) => {
-  try {
-    const response = await axios.put(`${BASE_URL}/api/countries/${id}`, countryData);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
+export const addNewCountry = createAsyncThunk('countries/addNew', async (country) => {
+  const response = await axios.post(`${BASE_URL}/countries`, country);
+  return response.data;
 });
 
-export const deleteCountry = createAsyncThunk('countries/delete', async (id, { rejectWithValue }) => {
-  try {
-    const response = await axios.delete(`${BASE_URL}/api/countries/${id}`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
+export const updateCountry = createAsyncThunk('countries/update', async ({ id, updates }) => {
+  const response = await axios.put(`${BASE_URL}/countries/${id}`, updates);
+  return response.data;
+});
+
+export const deleteCountry = createAsyncThunk('countries/delete', async (id) => {
+  const response = await axios.delete(`${BASE_URL}/countries/${id}`);
+  return response.data;
 });
 
 // Slice
@@ -44,48 +35,55 @@ const countrySlice = createSlice({
   name: 'countries',
   initialState: {
     countries: [],
-    status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
+    countryDetails: null,
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch All
-      .addCase(fetchCountries.pending, (state) => {
+      // Fetch all countries
+      .addCase(fetchAllCountries.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchCountries.fulfilled, (state, action) => {
+      .addCase(fetchAllCountries.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.countries = action.payload;
       })
-      .addCase(fetchCountries.rejected, (state, action) => {
+      .addCase(fetchAllCountries.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error.message;
       })
-      // Create
-      .addCase(createCountry.pending, (state) => {
+
+      // Fetch a single country
+      .addCase(fetchCountryById.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(createCountry.fulfilled, (state, action) => {
+      .addCase(fetchCountryById.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.countries.push(action.payload.data);
+        state.countryDetails = action.payload;
       })
-      .addCase(createCountry.rejected, (state, action) => {
+      .addCase(fetchCountryById.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error.message;
       })
-      // Update
+
+      // Add a new country
+      .addCase(addNewCountry.fulfilled, (state, action) => {
+        state.countries.push(action.payload);
+      })
+
+      // Update a country
       .addCase(updateCountry.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const index = state.countries.findIndex((c) => c._id === action.payload.data._id);
+        const index = state.countries.findIndex((c) => c._id === action.payload._id);
         if (index !== -1) {
-          state.countries[index] = action.payload.data;
+          state.countries[index] = action.payload;
         }
       })
-      // Delete
+
+      // Delete a country
       .addCase(deleteCountry.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.countries = state.countries.filter((c) => c._id !== action.payload.data._id);
+        state.countries = state.countries.filter((c) => c._id !== action.payload._id);
       });
   },
 });

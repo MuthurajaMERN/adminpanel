@@ -8,8 +8,9 @@ const productRoute = require('./routes/productRoutes')
 const connectDb = require('./config/db')
 const testimonialsRouter = require('./routes/testimonials');
 
-const touristCardsRoute = require('./routes/touristCardRoute');
-const countryRoutes = require('./routes/countryRoutes');
+const touristCardRouter =require('./routes/touristCardRoute')
+
+const packageRoutes = require('./routes/packages'); // Import the routes
 
 
 const app = express()
@@ -27,9 +28,10 @@ app.use(bodyParser.json());
 app.use('/auth',userRoute)
 app.use('/product',productRoute)
 app.use('/testimonials', testimonialsRouter);
+app.use('/touristcard', touristCardRouter);
 
-app.use('/touristcard', touristCardsRoute);
-app.use('/api/countries', countryRoutes);
+// app.use('/api/countries', countryRoutes);
+app.use('/api', packageRoutes);
 
 
 app.get('/',(req,res)=>{

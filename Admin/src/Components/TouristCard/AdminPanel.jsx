@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 const API_BASE_URL = 'http://localhost:8000';
 
 const TouristServiceForm = () => {
@@ -196,37 +197,7 @@ const TouristServiceForm = () => {
         </div>
       </form>
 
-      <table className="table-auto w-full text-left bg-white shadow-md rounded">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Category</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {touristList.map((item) => (
-            <tr key={item._id} className="border-t">
-              <td className="px-4 py-2">{item.title}</td>
-              <td className="px-4 py-2">{item.category}</td>
-              <td className="px-4 py-2 flex space-x-2">
-                <button
-                  onClick={() => handleEdit(item)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(item._id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+     
     </div>
   );
 };

@@ -1,163 +1,106 @@
 import React, { useState } from 'react';
 import { addTestimonial } from '../../slices/testimonialSlice';
-import { useSelector, useDispatch } from "react-redux";
-
+import { useSelector, useDispatch } from 'react-redux';
 
 const AdminAddTestimonial = () => {
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [rating, setRating] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+
   const dispatch = useDispatch();
-  const { loading, error,data } = useSelector((state) => state.testimonial.addTestimonial);
+  const { loading, error, data } = useSelector((state) => state.testimonial.addTestimonial);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTestimonial = { name, title, text, rating };
-    dispatch(addTestimonial({name, title, text, rating}))
+    dispatch(addTestimonial(newTestimonial));
     setName('');
     setTitle('');
     setText('');
     setRating(0);
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   const handleRating = (rate) => {
     setRating(rate);
   };
-  console.log(error,data)
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>Add a New Testimonial</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={styles.fieldContainer}>
-          <label style={styles.label}>Name:</label>
+    <div className="container mx-screen p-6 md:p-6 bg-gray-600 shadow-lg rounded-lg max-w-1xl">
+      <h1 className="text-2xl font-bold text-white mb-6 text-center">Add a New Testimonial</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-white font-medium mb-2">Name:</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            style={styles.input}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div style={styles.fieldContainer}>
-          <label style={styles.label}>Title:</label>
+        <div>
+          <label className="block text-white font-medium mb-2">Title:</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            style={styles.input}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div style={styles.fieldContainer}>
-          <label style={styles.label}>Review:</label>
+        <div>
+          <label className="block text-white font-medium mb-2">Review:</label>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             required
-            style={styles.textarea}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           />
         </div>
-
-        <div style={styles.fieldContainer}>
-          <label style={styles.label}>Rating:</label>
-          <div style={styles.starContainer}>
+        <div>
+          <label className="block text-white font-medium mb-2">Rating:</label>
+          <div className="flex space-x-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <span
                 key={star}
                 onClick={() => handleRating(star)}
-                style={{
-                  ...styles.star,
-                  color: star <= rating ? '#FFD700' : '#c3c3c3',
-                }}
+                className={`text-2xl cursor-pointer ${
+                  star <= rating ? 'text-yellow-400' : 'text-gray-400'
+                }`}
               >
                 ★
               </span>
             ))}
           </div>
         </div>
-            
-        <button type="submit" style={styles.button}>Add Testimonial</button>
+        <button
+          type="submit"
+          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
+        >
+          Add Testimonial
+        </button>
+        {submitted && (
+          <div className="text-green-600 font-medium mt-4 text-center">
+            Testimonial submitted successfully!
+          </div>
+        )}
       </form>
+      <div className="mt-8 text-center">
+        {submitted && (
+          <button
+            className="px-6 py-2 bg-gray-800 text-white font-semibold rounded-md hover:bg-gray-900 transition duration-200"
+            onClick={() => alert('Submit Testimonial action triggered!')}
+          >
+            Submit Testimonial
+          </button>
+        )}
+      </div>
     </div>
   );
-};
-
-// Inline CSS styles as JavaScript objects
-const styles = {
-  container: {
-    boxSizing: 'border-box',
-    maxWidth: '800px',
-    width: '100%',
-    padding: '30px 40px',
-    margin: '30px auto',
-    borderRadius: '25px',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
-  },
-  header: {
-    fontSize: '24px',
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: '20px',
-  },
-  fieldContainer: {
-    marginBottom: '24px',
-  },
-  label: {
-    display: 'block',
-    fontSize: '15px',
-    fontWeight: '500',
-    marginBottom: '8px',
-    color: '#333',
-  },
-  input: {
-    boxSizing: 'border-box',
-    width: '100%',
-    padding: '12px 15px',
-    borderRadius: '5px',
-    border: '1px solid #c3c3c3',
-    outline: 'none',
-    color: '#606060',
-    fontFamily: '"Poppins", sans-serif',
-    fontSize: '15px',
-    transition: 'border-color 0.2s ease',
-  },
-  textarea: {
-    boxSizing: 'border-box',
-    width: '100%',
-    padding: '12px 15px',
-    borderRadius: '5px',
-    border: '1px solid #c3c3c3',
-    outline: 'none',
-    color: '#606060',
-    fontFamily: '"Poppins", sans-serif',
-    fontSize: '15px',
-    transition: 'border-color 0.2s ease',
-    resize: 'vertical',
-  },
-  starContainer: {
-    display: 'flex',
-    gap: '5px',
-  },
-  star: {
-    fontSize: '20px',
-    cursor: 'pointer',
-  },
-  button: {
-    width: '100%',
-    height: '50px',
-    borderRadius: '6px',
-    backgroundColor: 'black',
-    border: 'none',
-    cursor: 'pointer',
-    color: '#ffffff',
-    fontSize: '16px',
-    fontWeight: '600',
-    marginTop: '30px',
-    transition: 'background-color 0.2s ease',
-  },
 };
 
 export default AdminAddTestimonial;

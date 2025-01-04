@@ -1,14 +1,27 @@
-// CardApp.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import AdminPanel from './AdminPanel';
-// import TouristCardForm from './TouristCardForm';
-// import TouristList from './TouristList';
+import TouristList from './TouristList';
 
 const CardApp = () => {
-  return <div>
+  const [showTouristList, setShowTouristList] = useState(false);
 
-   <AdminPanel/>
-  </div>;
+  // Function to handle form submission and toggle TouristList visibility
+  const handleFormSubmit = () => {
+    setShowTouristList(true); // Show the TouristList component
+  };
+
+  return (
+    <>
+      <div>
+        {/* Pass the handleFormSubmit function as a prop to AdminPanel */}
+        <AdminPanel onFormSubmit={handleFormSubmit} />
+      </div>
+      <div>
+        {/* Render TouristList only if showTouristList is true */}
+        {showTouristList && <TouristList />}
+      </div>
+    </>
+  );
 };
 
 export default CardApp;
